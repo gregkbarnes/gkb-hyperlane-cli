@@ -1,13 +1,12 @@
 // queryDispatchEvents.ts
 
-import { BigNumber, BigNumberish, ethers } from "ethers";
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
-import { MailBox } from "../lib/MailBox";
-import { AbiCoder, Bytes, hexValue, hexlify, parseEther } from "ethers/lib/utils";
-import { MatchingListElement } from "./readMatchingListElement";
 import dotenv from "dotenv";
+import { ethers } from "ethers";
+import { MailBox } from "../lib/MailBox";
+import { MatchingListElement } from "./readMatchingListElement";
 
 dotenv.config();
 
@@ -23,10 +22,61 @@ type UserMessage = {
 
 let userMessages: Array<UserMessage> = [];
 
-export async function queryDispatchEvents(matchingList: MatchingListElement, depth: number, filename: string) {
-  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_AVALANCHE);
-  const contractAddress = MailBox.avalanche.address;
+export async function queryDispatchEvents(matchingList: MatchingListElement, rpcUrl: string, depth: number, filename: string) {
+  const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
   const dispatchEventSignatureHash = ethers.utils.id("Dispatch(address,uint32,bytes32,bytes)");
+
+  let contractAddress;
+  let contractAbi;
+
+  try {
+    const originChain = matchingList.originDomain;
+
+    switch (originChain) {
+      case MailBox.arbitrum.domain:
+        contractAddress = MailBox.arbitrum.address;
+        contractAbi = MailBox.arbitrum.abi;
+        break;
+      case MailBox.avalanche.domain:
+        contractAddress = MailBox.avalanche.address;
+        contractAbi = MailBox.avalanche.abi
+        break;
+      case MailBox.bsc.domain:
+        console.log("WE GOT HERE BABY")
+        contractAddress = MailBox.bsc.address;
+        contractAbi = MailBox.bsc.abi
+        break;
+      case MailBox.celo.domain:
+        contractAddress = MailBox.celo.address;
+        contractAbi = MailBox.celo.abi
+        break;
+      case MailBox.ethereum.domain:
+        contractAddress = MailBox.ethereum.address;
+        contractAbi = MailBox.ethereum.abi
+        break;
+      case MailBox.optimism.domain:
+        contractAddress = MailBox.optimism.address;
+        contractAbi = MailBox.optimism.abi
+        break;
+      case MailBox.polygon.domain:
+        contractAddress = MailBox.polygon.address;
+        contractAbi = MailBox.polygon.abi
+        break;
+      case MailBox.moonbeam.domain:
+        contractAddress = MailBox.moonbeam.address;
+        contractAbi = MailBox.moonbeam.abi
+        break;
+      case MailBox.gnosis.domain:
+        contractAddress = MailBox.gnosis.address;
+        contractAbi = MailBox.gnosis.abi
+        break;
+      default:
+        throw new Error("Invalid originChain");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+
   const currentBlockNumber = await provider.getBlockNumber();
 
   let filter: ethers.providers.Filter = {
@@ -36,7 +86,7 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, dep
     topics: [dispatchEventSignatureHash]
   };
 
-  const iface = new ethers.utils.Interface(MailBox.avalanche.abi);
+  const iface = new ethers.utils.Interface(contractAbi!);
   console.log("Looking at the last " + depth + " blocks... (this might take a bit!)");
 
   for (let index = 0; index < QUERY_LIMIT / QUERY_CHUNK; index++) {

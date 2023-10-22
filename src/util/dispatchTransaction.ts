@@ -1,8 +1,8 @@
 // dispatchTransaction.ts
 
+import dotenv from "dotenv";
 import { ethers } from "ethers";
 import { MailBox } from "../lib/MailBox";
-import dotenv from "dotenv";
 
 dotenv.config();
 

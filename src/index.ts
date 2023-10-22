@@ -34,11 +34,15 @@ yargs
       argv.message as string,
     )
   })
-  .command('query <MatchingListElement_Filepath> <depth> <save_file_path>', 'View messages sent from target MailBox!', (yargs) => {
+  .command('query <MatchingListElement_Filepath> <RPC_URL> <depth> <save_file_path>', 'View messages sent from target MailBox!', (yargs) => {
     yargs.positional('MatchingListElement_Filepath', {
       describe: 'Path to valid MatchingListElement.json input\nhttps://github.com/hyperlane-xyz/hyperlane-monorepo/blob/465112db6fddb3b598d6da39c13491ff1bc7e700/typescript/infra/src/config/agent/relayer.ts#L19',
       type: 'string'
     }),
+      yargs.positional('RPC_URL', {
+        describe: 'URL of RPC corresponding to origin chain (IE: https://rpc.ankr.com/eth)',
+        type: 'string',
+      }),
       yargs.positional('depth', {
         describe: 'Number of blocks to query (prior to current block).',
         type: 'number'
@@ -49,6 +53,6 @@ yargs
       });
   }, async (argv) => {
     const matchingListElement: MatchingListElement = await readMatchingListElement(argv.MatchingListElement_Filepath as string);
-    queryDispatchEvents(matchingListElement, argv.depth as number, argv.save_file_path as string)
+    queryDispatchEvents(matchingListElement, argv.RPC_URL as string, argv.depth as number, argv.save_file_path as string)
   })
   .argv;
