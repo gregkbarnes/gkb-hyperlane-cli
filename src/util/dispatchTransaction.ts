@@ -26,7 +26,6 @@ export async function dispatchTransaction(
   // create logic to convert originChain to contractAddress
   let contractAddress: string;
   let contractAbi;
-  let mailbox: typeof MailBox;
 
   try {
     switch (originChain) {
@@ -37,6 +36,34 @@ export async function dispatchTransaction(
       case MailBox.avalanche.domain:
         contractAddress = MailBox.avalanche.address;
         contractAbi = MailBox.avalanche.abi
+        break;
+      case MailBox.bsc.domain:
+        contractAddress = MailBox.bsc.address;
+        contractAbi = MailBox.bsc.abi
+        break;
+      case MailBox.celo.domain:
+        contractAddress = MailBox.celo.address;
+        contractAbi = MailBox.celo.abi
+        break;
+      case MailBox.ethereum.domain:
+        contractAddress = MailBox.ethereum.address;
+        contractAbi = MailBox.ethereum.abi
+        break;
+      case MailBox.optimism.domain:
+        contractAddress = MailBox.optimism.address;
+        contractAbi = MailBox.optimism.abi
+        break;
+      case MailBox.polygon.domain:
+        contractAddress = MailBox.polygon.address;
+        contractAbi = MailBox.polygon.abi
+        break;
+      case MailBox.moonbeam.domain:
+        contractAddress = MailBox.moonbeam.address;
+        contractAbi = MailBox.moonbeam.abi
+        break;
+      case MailBox.gnosis.domain:
+        contractAddress = MailBox.gnosis.address;
+        contractAbi = MailBox.gnosis.abi
         break;
       default:
         throw new Error("Invalid originChain");

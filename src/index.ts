@@ -52,35 +52,3 @@ yargs
     queryDispatchEvents(matchingListElement, argv.depth as number, argv.save_file_path as string)
   })
   .argv;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// yargs
-//   .command('balance <address>', 'fetch balance of an address', (yargs) => {
-//     yargs.positional('address', {
-//       describe: 'Ethereum address to check balance',
-//       type: 'string'
-//     });
-//   }, async (argv) => {
-//     const balance = await getBalance(argv.address as string);
-//     console.log(`Balance of ${argv.address}: ${ethers.utils.formatEther(balance)}`);
-//   })
-//   .argv;
-
-// async function getBalance(address: string): Promise<ethers.BigNumber> {
-//   let provider = ethers.getDefaultProvider('mainnet');
-//   return provider.getBalance(address);
-// }
-
