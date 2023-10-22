@@ -42,7 +42,6 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, rpc
         contractAbi = MailBox.avalanche.abi
         break;
       case MailBox.bsc.domain:
-        console.log("WE GOT HERE BABY")
         contractAddress = MailBox.bsc.address;
         contractAbi = MailBox.bsc.abi
         break;
