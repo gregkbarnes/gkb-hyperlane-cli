@@ -37,6 +37,7 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, dep
   };
 
   const iface = new ethers.utils.Interface(MailBox.avalanche.abi);
+  console.log("Looking at the last " + depth + " blocks... (this might take a bit!)");
 
   for (let index = 0; index < QUERY_LIMIT / QUERY_CHUNK; index++) {
     filter.fromBlock = currentBlockNumber - QUERY_LIMIT + index * QUERY_CHUNK;
