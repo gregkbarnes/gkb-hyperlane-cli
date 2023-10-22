@@ -61,15 +61,4 @@ export async function dispatchTransaction(
   } catch (error) {
     console.log(error);
   }
-
-
-
-
-
-  // body = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(body));
-
-  // update to choose public rpc or use provided one
-
-
-
 }

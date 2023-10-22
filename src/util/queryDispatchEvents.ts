@@ -13,7 +13,6 @@ dotenv.config();
 
 let QUERY_LIMIT = 5000;
 const QUERY_CHUNK = 2500;
-// let logs = [];
 
 type UserMessage = {
   sender: string;
@@ -23,8 +22,6 @@ type UserMessage = {
 };
 
 let userMessages: Array<UserMessage> = [];
-
-
 
 export async function queryDispatchEvents(matchingList: MatchingListElement, depth: number, filename: string) {
   const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_AVALANCHE);
@@ -39,12 +36,11 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, dep
     topics: [dispatchEventSignatureHash]
   };
 
-  const iface = new ethers.utils.Interface(MailBox.avalanche.abi); // assuming MailBox.avalanche.abi is the ABI for your contract
+  const iface = new ethers.utils.Interface(MailBox.avalanche.abi);
 
   for (let index = 0; index < QUERY_LIMIT / QUERY_CHUNK; index++) {
     filter.fromBlock = currentBlockNumber - QUERY_LIMIT + index * QUERY_CHUNK;
     filter.toBlock = filter.fromBlock + QUERY_CHUNK;
-    // console.log("from: " + filter.fromBlock + " to: " + filter.toBlock);
     let logArray = await provider.getLogs(filter);
     await sleep(250);
 
