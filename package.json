@@ -1,0 +1,25 @@
+{
+  "name": "hyperlane-cli-gkb",
+  "version": "1.0.0",
+  "bin": {
+    "hyperlane-cli-gkb": "./dist/index.js"
+  },
+  "main": "index.js",
+  "author": "Greg Barnes",
+  "license": "MIT",
+  "dependencies": {
+    "ethers": "5.7.0",
+    "typescript": "^5.2.2",
+    "yargs": "^17.7.2"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "start": "node ./dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.7",
+    "@types/yargs": "^17.0.29",
+    "dotenv": "^16.3.1"
+  }
+}
