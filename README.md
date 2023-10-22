@@ -13,9 +13,9 @@ A simple yargs-based (node) CLI tool written in typescript for [hyperlane.xyz](h
  `yarn start [command] <args>...`
 ### Commands
   `yarn start dispatch`                         *Dispatch a cross-chain message<br>*
-  <MatchingListElement_Filepath> <RPC_URL>  <message> <private_key><br>
+  <MatchingListElement_Filepath> <RPC_URL> <message> <private_key><br>
   `yarn start query`                            *View messages sent from target MailBox*<br>
-  <MatchingListElement_Filepath> <depth> <save_file_path><br>
+  <MatchingListElement_Filepath> <RPC_URL> <depth> <save_file_path><br>
 Options:<br>
   --help     Show help                                                 [boolean]<br>
   --version  Show version number                                       [boolean]<br>
