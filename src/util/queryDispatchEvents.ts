@@ -82,7 +82,10 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, rpc
     address: contractAddress,
     fromBlock: currentBlockNumber - 2500,
     toBlock: currentBlockNumber,
-    topics: [dispatchEventSignatureHash]
+    topics: [
+      dispatchEventSignatureHash,
+      ethers.utils.hexZeroPad(String(matchingList.senderAddress), 32),
+    ]
   };
 
   const iface = new ethers.utils.Interface(contractAbi!);
@@ -91,26 +94,29 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, rpc
   for (let index = 0; index < QUERY_LIMIT / QUERY_CHUNK; index++) {
     filter.fromBlock = currentBlockNumber - QUERY_LIMIT + index * QUERY_CHUNK;
     filter.toBlock = filter.fromBlock + QUERY_CHUNK;
-    let logArray = await provider.getLogs(filter);
-    await sleep(250);
+    try {
+      let logArray = await provider.getLogs(filter);
+      await sleep(250);
 
-    logArray.forEach(log => {
-      const decodedLog = iface.parseLog(log);
-      let args = decodedLog.args;
-      const message = args.message;
-      const newByteArray = ethers.utils.arrayify(message);
-      const utf8String = new TextDecoder("utf-8").decode(new Uint8Array(newByteArray));
+      logArray.forEach(log => {
+        const decodedLog = iface.parseLog(log);
+        let args = decodedLog.args;
+        const message = args.message;
+        const newByteArray = ethers.utils.arrayify(message);
+        const utf8String = new TextDecoder("utf-8").decode(new Uint8Array(newByteArray));
 
-      const userMessage: UserMessage = {
-        "sender": args.sender,
-        "destination": args.destination,
-        "recipient": "0x" + args.recipient.slice(-39),
-        "message": utf8String.trim(),
-      }
-      userMessages.push(userMessage);
-    });
+        const userMessage: UserMessage = {
+          "sender": args.sender,
+          "destination": args.destination,
+          "recipient": "0x" + args.recipient.slice(-39),
+          "message": utf8String.trim(),
+        }
+        userMessages.push(userMessage);
+      });
+    } catch (error) {
+      console.log("Error getting logs - ", error);
+    }
   }
-
   logMessages()
 
   if (filename != undefined) {

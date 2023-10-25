@@ -52,7 +52,15 @@ yargs
         type: 'string'
       });
   }, async (argv) => {
-    const matchingListElement: MatchingListElement = await readMatchingListElement(argv.MatchingListElement_Filepath as string);
-    queryDispatchEvents(matchingListElement, argv.RPC_URL as string, argv.depth as number, argv.save_file_path as string)
+    try {
+      const matchingListElement: MatchingListElement = await readMatchingListElement(argv.MatchingListElement_Filepath as string);
+      try {
+        await queryDispatchEvents(matchingListElement, argv.RPC_URL as string, argv.depth as number, argv.save_file_path as string);
+      } catch (error) {
+        console.error("Error occurred while querying dispatch events:", error);
+      }
+    } catch (error) {
+      console.log("Error while loading MatchingListElement json - ", error);
+    }
   })
   .argv;
