@@ -21,6 +21,7 @@ type UserMessage = {
 };
 
 let userMessages: Array<UserMessage> = [];
+let senderAddresses: string[] = [];
 
 export async function queryDispatchEvents(matchingList: MatchingListElement, rpcUrl: string, depth: number, filename: string) {
   const provider = new ethers.providers.JsonRpcProvider(rpcUrl);
@@ -28,6 +29,15 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, rpc
 
   let contractAddress;
   let contractAbi;
+
+  if (typeof matchingList.senderAddress == 'string') {
+    senderAddresses.push(matchingList.senderAddress);
+  } else if (matchingList.senderAddress != undefined) {
+    senderAddresses = matchingList.senderAddress;
+    senderAddresses.forEach((addr, index) => {
+      senderAddresses[index] = ethers.utils.hexZeroPad(addr, 32);
+    });
+  }
 
   try {
     const originChain = matchingList.originDomain;
@@ -84,7 +94,7 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, rpc
     toBlock: currentBlockNumber,
     topics: [
       dispatchEventSignatureHash,
-      ethers.utils.hexZeroPad(String(matchingList.senderAddress), 32),
+      senderAddresses,
     ]
   };
 
