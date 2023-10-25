@@ -34,10 +34,11 @@ export async function queryDispatchEvents(matchingList: MatchingListElement, rpc
     senderAddresses.push(matchingList.senderAddress);
   } else if (matchingList.senderAddress != undefined) {
     senderAddresses = matchingList.senderAddress;
-    senderAddresses.forEach((addr, index) => {
-      senderAddresses[index] = ethers.utils.hexZeroPad(addr, 32);
-    });
   }
+
+  senderAddresses.forEach((addr, index) => {
+    senderAddresses[index] = ethers.utils.hexZeroPad(addr, 32);
+  });
 
   try {
     const originChain = matchingList.originDomain;
